@@ -1,74 +1,155 @@
-
 # SPIT GPU Docs 
 
 Use this for coding and running your tasks if you want to use GPUs.
 
-Always run your code on a local machine, and once its running fine without any error only then move it over GPU.
+Always run your code on a local machine, and once it's running fine without any error only then move it over GPU.
 
-Checkout the video  over here: https://youtu.be/jgjSj-YrQgs?si=sehbIE1ZT_F5-yPy
+Checkout the video over here: https://youtu.be/jgjSj-YrQgs?si=sehbIE1ZT_F5-yPy
 
 ---
 
-## For sbatch
+=================================================================
+WELCOME TO THE SPIT GPU CLUSTER
+=================================================================
+### System Hardware & Limits:
+  * **CPUs:** Dual AMD EPYC (224 Threads, 112 Cores)
+  * **GPUs:** 2x NVIDIA RTX A6000
+  * **RAM:**  250 GB
+  * **Max Job Time:** 7 Days (Partition: `general`)
+
+!!! IMPORTANT: GPU ACCESS IS RESTRICTED !!!
+To use a GPU, you MUST use `srun`, `sbatch`, or Open OnDemand.
+Direct access via SSH shell is disabled for fair use.
+
+---
+
+=================================================================
+GPU SOFTWARE ENVIRONMENT GUIDE
+=================================================================
+Software on this cluster is managed via Modules. 
+You do NOT need to install Python/Conda manually.
+
+To see available software:
+```sh
+module avail
+```
+
+To load Python 3.11:
+```sh
+module load python/3.11.14
+```
+
+To create a fast virtual environment (Recommended):
+```sh
+uv venv my_env
+source my_env/bin/activate
+uv pip install torch torchvision
+```
+
+To use Conda instead:
+```sh
+module load miniconda3
+conda create -n my_project python=3.11
+conda activate my_project
+```
+
+---
+
+=================================================================
+CONTAINERS (APPTAINER)
+=================================================================
+Need a complex environment or NVIDIA NGC container?
+Use Apptainer to run Docker images securely in user-space.
+
+Pull a Docker image:
+```sh
+apptainer pull pytorch.sif docker://nvcr.io/nvidia/pytorch:24.02-py3
+```
+
+Run with GPU support (--nv flag binds the host GPUs):
+```sh
+apptainer exec --nv pytorch.sif python script.py
+```
+
+=================================================================
+Need a specific software package or version?
+Please contact the GPU administrators to request a new module.
+=================================================================
+
+---
+
+## Templates Guide
+
+We have added several boilerplate submission scripts to the `templates/` directory to help you get started quickly. These templates cover various use cases:
+
+* **`cpu_worker/`**: For CPU-intensive tasks requiring no GPUs. Optimized with 16 cores and 32GB RAM.
+* **`gpu_single/`**: Standard AI/ML job using 1 GPU, 32 CPU cores, and 64GB RAM. Ideal for most training tasks.
+* **`gpu_max/`**: For heavy, multi-GPU workloads. Requests all 2 GPUs, 112 cores, and 120GB RAM (max limits). Use only when absolutely necessary!
+* **`mpi_distributed/`**: Template for running MPI CPU jobs without GPUs (64 tasks/cores).
+* **`gpu_apptainer/`**: Specifically structured for running containerized AI jobs (Docker/NGC) via Apptainer with GPU binding enabled.
+
+To use a template, simply copy its `submit.sh` into your project directory and modify it. For example:
+```sh
+cp templates/gpu_single/submit.sh my_project/
+cd my_project/
+sbatch submit.sh
+```
+
+---
+
+## Quickstart: sbatch
 
 Write your code in `main.py`. You are allowed to create multiple files and link them with `main.py`.
 
-Update `start.sh`:
+You can adapt a script from `templates/` or create `start.sh`:
 
 ```sh
+#!/bin/bash
 #SBATCH --job-name=gpu_test        # Name your job (should match its purpose)
-#SBATCH --partition=general       # Do not change this
-#SBATCH --gres=gpu:2              # gpu:1 uses 1 GPU, gpu:2 uses both GPUs
-#SBATCH --cpus-per-task=32        # Use multiple CPU cores (< 100)
-#SBATCH --mem=120G                # Max RAM (< 250G)
-#SBATCH --time=7-00:00:00         # Max runtime (7 days)
-````
+#SBATCH --partition=general        # Do not change this
+#SBATCH --gres=gpu:2               # gpu:1 uses 1 GPU, gpu:2 uses both GPUs
+#SBATCH --cpus-per-task=32         # Use multiple CPU cores (< 100)
+#SBATCH --mem=120G                 # Max RAM (< 250G)
+#SBATCH --time=7-00:00:00          # Max runtime (7 days)
 
-Install required packages:
-
-```sh
-echo "Installing packages"
-uv pip install torch torchvision matplotlib tqdm
+# Load environment & Run
+module load python/3.11.14
+source my_env/bin/activate
+python main.py
 ```
 
-Once completed, submit your job:
-
+Submit your job:
 ```sh
 sbatch start.sh
 ```
 
 To check job status:
-
 ```sh
 squeue -l
 ```
 
 ---
 
-## For Interactive Apps
+## Interactive Apps
 
-You can use interactive apps for development and testing.
+For interactive apps like Desktop mode, Jupyter Notebook, and VS Code, visit **[cluster.gpu.spit.ac.in](http://cluster.gpu.spit.ac.in)** and navigate to the **Interactive Apps** section.
 
-Clone this repo repo with `git clone` and update it with your code. 
+You can use these interactive apps for development and testing.
 
----
+Clone this repo with `git clone` and update it with your code. 
 
 ### VS Code Setup
 
 ```sh
-module load python/3.11.14     # Load Python
-uv venv rio_env      
-         # Create virtual environment
-source rio_env/bin/activate   # Activate environment
+module load python/3.11.14       # Load Python
+uv venv rio_env                  # Create virtual environment
+source rio_env/bin/activate      # Activate environment
 
-uv pip install <packages>     # Install dependencies
-python main.py                # Run your script
+uv pip install <packages>        # Install dependencies
+python main.py                   # Run your script
 ```
 
----
-
 ### Jupyter
-
 Use the `main.ipynb` file as a template for your notebook.
 
 ---
@@ -91,8 +172,10 @@ Use the `main.ipynb` file as a template for your notebook.
 - GPUs must only be used for the approved task. Misuse may result in a 2-year ban.
 - Interactive apps must not be used for more than 2 hours continuously.
 
-For any queries, contact: rehan.ansari24@spit.ac.in
+For any queries or help with cluster GPU-related issues, contact:
+- **varun.jhaveri23@spit.ac.in**
+- rehan.ansari24@spit.ac.in
 
 ---
 
-Maintained by Rehan Ansari
+Maintained by Rehan Ansari & Varun Jhaveri
