@@ -8,24 +8,20 @@ Checkout the video over here: https://youtu.be/jgjSj-YrQgs?si=sehbIE1ZT_F5-yPy
 
 ---
 
-=================================================================
-WELCOME TO THE SPIT GPU CLUSTER
-=================================================================
+# WELCOME TO THE SPIT GPU CLUSTER
+
 ### System Hardware & Limits:
   * **CPUs:** Dual AMD EPYC (224 Threads, 112 Cores)
   * **GPUs:** 2x NVIDIA RTX A6000
   * **RAM:**  250 GB
   * **Max Job Time:** 7 Days (Partition: `general`)
 
-!!! IMPORTANT: GPU ACCESS IS RESTRICTED !!!
-To use a GPU, you MUST use `srun`, `sbatch`, or Open OnDemand.
-Direct access via SSH shell is disabled for fair use.
+
 
 ---
 
-=================================================================
-GPU SOFTWARE ENVIRONMENT GUIDE
-=================================================================
+# GPU SOFTWARE ENVIRONMENT GUIDE
+
 Software on this cluster is managed via Modules. 
 You do NOT need to install Python/Conda manually.
 
@@ -55,9 +51,8 @@ conda activate my_project
 
 ---
 
-=================================================================
-CONTAINERS (APPTAINER)
-=================================================================
+# CONTAINERS (APPTAINER) 
+
 Need a complex environment or NVIDIA NGC container?
 Use Apptainer to run Docker images securely in user-space.
 
@@ -71,10 +66,10 @@ Run with GPU support (--nv flag binds the host GPUs):
 apptainer exec --nv pytorch.sif python script.py
 ```
 
-=================================================================
-Need a specific software package or version?
-Please contact the GPU administrators to request a new module.
-=================================================================
+
+# Need a specific software package or version?
+# Please contact the GPU administrators to request a new module.
+
 
 ---
 
@@ -101,22 +96,7 @@ sbatch submit.sh
 
 Write your code in `main.py`. You are allowed to create multiple files and link them with `main.py`.
 
-You can adapt a script from `templates/` or create `start.sh`:
-
-```sh
-#!/bin/bash
-#SBATCH --job-name=gpu_test        # Name your job (should match its purpose)
-#SBATCH --partition=general        # Do not change this
-#SBATCH --gres=gpu:2               # gpu:1 uses 1 GPU, gpu:2 uses both GPUs
-#SBATCH --cpus-per-task=32         # Use multiple CPU cores (< 100)
-#SBATCH --mem=120G                 # Max RAM (< 250G)
-#SBATCH --time=7-00:00:00          # Max runtime (7 days)
-
-# Load environment & Run
-module load python/3.11.14
-source my_env/bin/activate
-python main.py
-```
+You can adapt a script from `templates/` use  [`start.sh`](https://github.com/Rio-0912/SPIT-GPU-Docs/blob/master/start.sh) in template 
 
 Submit your job:
 ```sh
@@ -127,6 +107,12 @@ To check job status:
 ```sh
 squeue -l
 ```
+
+Check GPU utilization using nvidia-smi during your job. Look for high GPU usage (%) and memory consumption.
+Use a short test job: `#SBATCH --time=00:05:00`
+
+Monitor in real time: `watch -n 1 nvidia-smi`.
+If usage is low, the job may be CPU-bound, using a small batch size, or not properly configured for GPU.
 
 ---
 
@@ -173,7 +159,7 @@ Use the `main.ipynb` file as a template for your notebook.
 - Interactive apps must not be used for more than 2 hours continuously.
 
 For any queries or help with cluster GPU-related issues, contact:
-- **varun.jhaveri23@spit.ac.in**
+- varun.jhaveri23@spit.ac.in
 - rehan.ansari24@spit.ac.in
 
 ---
