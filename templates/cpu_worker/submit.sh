@@ -9,7 +9,9 @@
 #SBATCH --output=%x_%j.out
 #SBATCH --error=%x_%j.err
 
-cd "$SLURM_SUBMIT_DIR"
+if [ -n "$SLURM_SUBMIT_DIR" ]; then
+    cd "$SLURM_SUBMIT_DIR" || { echo "Failed to change to SLURM_SUBMIT_DIR: $SLURM_SUBMIT_DIR" >&2; exit 1; }
+fi
 echo "Starting CPU job on $HOSTNAME with $SLURM_CPUS_PER_TASK cores."
 
 # Load your environment here
