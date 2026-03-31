@@ -15,3 +15,4 @@ echo "Starting MPI job with $SLURM_NTASKS tasks."
 # Load MPI module if available, then run using srun so Slurm manages MPI ranks:
 # srun ./my_mpi_program
 # (Use mpirun only if your cluster documentation explicitly recommends it.)
+# (Use mpirun only if your cluster documentation explicitly recommends it.)
