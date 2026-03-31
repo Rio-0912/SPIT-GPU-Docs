@@ -2,7 +2,7 @@
 
 Use this for coding and running your tasks if you want to use GPUs.
 
-Always run your code on a local machine, and once its running fine without any error only then move it over GPU.
+Always run your code on a local machine, and once it's running fine without any error only then move it over GPU.
 
 Checkout the video over here: https://youtu.be/jgjSj-YrQgs?si=sehbIE1ZT_F5-yPy
 
