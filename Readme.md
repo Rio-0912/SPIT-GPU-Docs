@@ -172,7 +172,7 @@ Use the `main.ipynb` file as a template for your notebook.
 - GPUs must only be used for the approved task. Misuse may result in a 2-year ban.
 - Interactive apps must not be used for more than 2 hours continuously.
 
-For any queries or help with actual cluster GPUs issues, contact:
+For any queries or help with cluster GPU-related issues, contact:
 - **varun.jhaveri23@spit.ac.in**
 - rehan.ansari24@spit.ac.in
 
