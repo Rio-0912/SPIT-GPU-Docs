@@ -10,7 +10,7 @@
 #SBATCH --output=%x_%j.out
 #SBATCH --error=%x_%j.err
 
-cd "$SLURM_SUBMIT_DIR"
+cd "${SLURM_SUBMIT_DIR:-$PWD}" || { echo "Error: failed to change directory to \${SLURM_SUBMIT_DIR:-$PWD}" >&2; exit 1; }
 
 CONTAINER="my_container.sif"
 SCRIPT="train.py"
