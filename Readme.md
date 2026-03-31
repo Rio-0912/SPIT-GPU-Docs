@@ -50,6 +50,7 @@ To use Conda instead:
 ```sh
 module load miniconda3
 conda create -n my_project python=3.11
+conda activate my_project
 ```
 
 ---
