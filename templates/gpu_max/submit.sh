@@ -10,7 +10,7 @@
 #SBATCH --output=%x_%j.out
 #SBATCH --error=%x_%j.err
 
-cd "$SLURM_SUBMIT_DIR"
+cd "${SLURM_SUBMIT_DIR:-$PWD}" || { echo "Failed to change directory to SLURM_SUBMIT_DIR; aborting." >&2; exit 1; }
 echo "Starting MAX resource job on $HOSTNAME."
 echo "Assigned GPUs: $CUDA_VISIBLE_DEVICES"
 
