@@ -5,7 +5,11 @@ Use this for coding and running your tasks if you want to use GPUs.
 Always run your code on a local machine, and once it's running fine without any error only then move it over GPU.
 
 Checkout the video over here: https://youtu.be/jgjSj-YrQgs?si=sehbIE1ZT_F5-yPy
-
+## !!! IMPORTANT: GPU ACCESS IS LIMITED FOR INTERACTIVE APPS !!!
+Interactive apps (Jupyter, Code) have a max time limit of 1.5 hours.
+If the training requires more time till 7 days which is max job time,
+submit the job via sbatch.
+Refer documentation if needed.
 ---
 
 # WELCOME TO THE SPIT GPU CLUSTER
